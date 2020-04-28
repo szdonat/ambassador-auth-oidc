@@ -28,11 +28,15 @@ var nonceChars = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012
 
 var loginSessions []*loginSession
 
+var stateParameterSize int
+
 func init() {
 	hostname = strings.Split(parseEnvURL("SELF_URL").Host, ":")[0] // Because Host still has a port if it was in URL
 
 	clientID := parseEnvVar("CLIENT_ID")
 	clientSecret := parseEnvVar("CLIENT_SECRET")
+
+	stateParameterSize = getenvOrDefaultInt("STATE_PARAMETER_SIZE", 8)
 
 	ctx = context.Background()
 
@@ -191,7 +195,8 @@ func OIDCHandler(w http.ResponseWriter, r *http.Request) {
 
 // beginOIDCLogin starts the login sequence by creating state and forwarding user to OIDC provider for verification
 func beginOIDCLogin(w http.ResponseWriter, r *http.Request, origURL string) {
-	var state = createNonce(8)
+
+	var state = createNonce(stateParameterSize)
 
 	if redisdb != nil {
 		err := redisdb.Set("state-"+state, origURL, time.Hour).Err()

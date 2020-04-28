@@ -9,8 +9,8 @@ RUN dep ensure
 RUN go build -o /go/bin/ambassador-auth-oidc
 
 FROM alpine:3.8
-LABEL org.label-schema.vcs-url="https://github.com/ajmyyra/ambassador-auth-oidc"
-LABEL org.label-schema.version="1.3"
+LABEL org.label-schema.vcs-url="https://github.com/szdonat/ambassador-auth-oidc"
+LABEL org.label-schema.version="1.3.1"
 RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/*
 RUN addgroup -S auth && adduser -S -G auth auth
 USER auth

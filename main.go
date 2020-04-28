@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/gorilla/handlers"
@@ -44,6 +45,21 @@ func getenvOrDefault(key, fallback string) string {
 		return fallback
 	}
 	return value
+}
+
+// Read an int from an environment variable, or use the given default value
+func getenvOrDefaultInt(key string, fallback int) int {
+	value := os.Getenv(key)
+	if len(value) == 0 {
+		log.Printf("No %s specified, using '%d' as default.", key, fallback)
+		return fallback
+	}
+	valueInt, err := strconv.Atoi(value)
+	if err != nil {
+		log.Printf("Invalid %s specified: '%s', using '%d' as default.", key, value, fallback)
+		return fallback
+	}
+	return valueInt
 }
 
 func scheduleBlacklistUpdater(seconds int) {

@@ -30,15 +30,16 @@ Following environment variables are used by the software.
 + **SKIP_AUTH_URI** Space separated whitelist of URIs like "/info /health" to bypass authorization. Contains nothing by default.
 + **REDIS_ADDRESS** Address for your Redis instance, IP or hostname. Required for communication of setups containing more than one AuthService.
 + **REDIS_PASSWORD** Password for your Redis service, if needed.
++ **STATE_PARAMETER_SIZE** The number of random characters in the state parameter. The default value is 8, the recommended value is 64.
 
 ## Usage
 
-All (except the Kubernetes one) expect that you've cloned the code into your own Go environment (for example, to $GOPATH/src/github.com/ajmyyra/ambassador-auth-oidc).
+All (except the Kubernetes one) expect that you've cloned the code into your own Go environment (for example, to $GOPATH/src/github.com/szdonat/ambassador-auth-oidc).
 
 On browser-side, AuthProxy sets up a cookie named "auth" when redirecting the browser back to the original resource. After login, requests are allowed through by either with a cookie or by setting `X-Auth-Token` header in the request. Token is a JSON Web Token that can be fetched from the "auth" cookie through `document.cookie` in DOM.
 
 ### As binary
-Start by cloning the code into your own Go environment (for example, to $GOPATH/src/github.com/ajmyyra/ambassador-auth-oidc). Fetch dependencies, build the binary and run it.
+Start by cloning the code into your own Go environment (for example, to $GOPATH/src/github.com/szdonat/ambassador-auth-oidc). Fetch dependencies, build the binary and run it.
 
 ```
 cd /path/to/code
@@ -53,7 +54,7 @@ go build
 Start the container with `docker run`.
 
 ```
-docker run -p 8080:8080 -e OIDC_PROVIDER="https://your-oidc-provider/" -e SELF_URL="http://your-server.com:8080" -e OIDC_SCOPES="profile email" -e CLIENT_ID="YOUR_CLIENT_ID" -e CLIENT_SECRET="YOUR_CLIENT_SECRET" ajmyyra/ambassador-auth-oidc:1.3
+docker run -p 8080:8080 -e OIDC_PROVIDER="https://your-oidc-provider/" -e SELF_URL="http://your-server.com:8080" -e OIDC_SCOPES="profile email" -e CLIENT_ID="YOUR_CLIENT_ID" -e CLIENT_SECRET="YOUR_CLIENT_SECRET" szdonat/ambassador-auth-oidc:1.3.1
 ```
 
 ### With Ambassador in Kubernetes
